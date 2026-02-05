@@ -1,5 +1,5 @@
 <?php
-namespace Vendor\ActivityLog\Facades;
+namespace ActivityLog\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
