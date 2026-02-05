@@ -1,23 +1,24 @@
 <?php
+
 namespace ActivityLog\Providers;
 
 use ActivityLog\Observers\GlobalActivityObserver;
-use Illuminate\Database\Eloquent\Model;
+use ActivityLog\Services\ActivityLogManager;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use ActivityLog\Services\ActivityLogManager;
 
 class ActivityLogServiceProvider extends ServiceProvider
 {
     public function register()
     {
-//        $this->app->singleton('activitylog', function ($app) {
-//            return new ActivityLogManager();
-//        });
+        $this->app->singleton('activitylog', function ($app) {
+            return new ActivityLogManager;
+        });
     }
 
     public function boot()
     {
+        //ذخیره ی اتوماتیک لاگ ها در جدول
         Event::listen('eloquent.created:*', function ($event, $models) {
             foreach ($models as $model) {
                 (new GlobalActivityObserver)->created($model);
@@ -38,5 +39,8 @@ class ActivityLogServiceProvider extends ServiceProvider
 
         // بارگذاری migration ها
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        // بارگذاری کانفیگ ها
+        $this->mergeConfigFrom(__DIR__.'/../config/activity-log.php', 'activity-log');
     }
 }
