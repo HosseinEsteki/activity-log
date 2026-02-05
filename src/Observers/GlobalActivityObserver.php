@@ -14,25 +14,25 @@ class GlobalActivityObserver
     }
     private function isNotExcepted(Model $model)
     {
-        return in_array(get_class($model),$this->exceptModels);
+        return !in_array(get_class($model),$this->exceptModels);
     }
     public function created(Model $model)
     {
-        if (array_search($model, $this->exceptModels) !== false) {
+        if ($this->isNotExcepted($model)) {
             $this->log($model, 'create');
         }
     }
 
     public function updated(Model $model)
     {
-        if (get_class($model) != 'ActivityLog\Models\ActivityLog') {
+        if ($this->isNotExcepted($model)) {
             $this->log($model, 'update');
         }
     }
 
     public function deleted(Model $model)
     {
-        if (get_class($model) != 'ActivityLog\Models\ActivityLog'||) {
+        if ($this->isNotExcepted($model)) {
             $this->log($model, 'delete');
         }
     }
