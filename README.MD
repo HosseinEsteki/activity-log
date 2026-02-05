@@ -18,7 +18,7 @@
 
 ## 📦 نصب
 ```bash
-composer require laravel/activity-log
+composer require hosseinesteki/activity-log
 ```
 
 ---
